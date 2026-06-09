@@ -1,0 +1,78 @@
+%% A simple template for a term report using the Hagenberg setup
+%% based on the standard LaTeX 'report' class
+
+%%% Magic comments for setting the correct parameters in compatible IDEs
+% !TeX encoding = utf8
+% !TeX program = pdflatex 
+% !TeX spellcheck = en_US
+% !BIB program = biber
+
+\RequirePackage[utf8]{inputenc} % Remove when using lualatex or xelatex!
+\RequirePackage{hgbpdfa}				% Remove if NO PDF/A output is desired
+
+\documentclass[language=english,titlepage=false,smartquotes=true]{hgbreport}
+% Supported options in [..]:
+%    Main language: language=english (default), language=german
+%    Typographic quotes: smartquotes=true, smartquotes=false (default)
+%    APA citation style: apa=true, apa=false (default)
+%    Title page: titlepage=true (default), titlepage=false
+%    Page layout: twoside=false (single-sided, default), twoside=true (double-sided)
+%    Update check: updatecheck=true (default), updatecheck=false (to suppress)
+%%%-----------------------------------------------------------------------------
+
+\graphicspath{{images/}}  % Location of images and graphics
+\bibliography{hgbreferences} % Biblatex bibliography file (hgbreferences.bib)
+
+%%%-----------------------------------------------------------------------------
+\begin{document}
+%%%-----------------------------------------------------------------------------
+
+\author{Simone B.\ Feldbacher, Andreas \ Schrattenecker}                    % Your name
+\title{VCO2IL Computer Vision\\ % Name of the course or project
+			Term Report}	                 % or "Project Report"
+\date{\today}
+
+%%%-----------------------------------------------------------------------------
+\maketitle
+%%%-----------------------------------------------------------------------------
+
+\begin{abstract}\noindent
+
+
+
+\bigskip
+\noindent
+Use the abstract to provide a short summary of the document's contents.
+\end{abstract}
+
+%%%-----------------------------------------------------------------------------
+\tableofcontents
+%%%-----------------------------------------------------------------------------
+
+\part{Class Exercises}
+\include{chapters/exercise1}
+\include{chapters/exercise2}
+
+\part{Related Work Research - Real time Hand Gesture Recognition}
+\include{chapters/research_intro}
+\include{chapters/research_common}
+\include{chapters/hand_tracking}
+\include{chapters/research_conclusion}
+%%%-----------------------------------------------------------------------------
+\appendix                                                   % Switch to appendix
+%%%-----------------------------------------------------------------------------
+
+%%%-----------------------------------------------------------------------------
+\chapter{Supplementary Materials}
+%%%-----------------------------------------------------------------------------
+
+The appendix is a good place to attach a user guide, screenshots, installation
+instructions, etc. Add a separate chapter for each major item.
+
+%%%-----------------------------------------------------------------------------
+\MakeBibliography[nosplit]
+%%%-----------------------------------------------------------------------------
+
+%%%-----------------------------------------------------------------------------
+\end{document}
+%%%-----------------------------------------------------------------------------

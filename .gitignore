@@ -1,0 +1,47 @@
+.DS_Store
+Thumbs.db
+
+# LaTeX intermediate and build files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ind
+*.ilg
+*.lof
+*.lot
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.xdv
+*.pdfsync
+*.synctex.gz
+*.synctex
+*.fdb_latexmk
+*.fls
+*.run.xml
+*.log
+*.dvi
+*.ps
+*.pdf
+
+# latexmk and build directories
+build/
+_minted-
+
+# Backup and temp files
+*~
+*.bak
+*.backup
+*.orig
+*.tmp
+
+# Editors
+*.swp
+*.swo
+
+# Keep final PDFs if you want them tracked; otherwise uncomment next line
+#*.pdf
