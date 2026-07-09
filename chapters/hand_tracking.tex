@@ -1,2 +1,30 @@
 \chapter{Hand Tracking}
-Methods, algorithms, datasets, experiments.
+ 
+\section{Overview}
+Gesture recognition is a central part of human-computer interaction. It allows hand movements to be used directly as input signals. Computer-vision-based approaches are particularly popular, since they need no special sensors and work with cameras that are already widely available. This makes them well suited for real applications such as virtual and augmented reality, sign language recognition, and general user interfaces \cite{qiComputerVisionbasedHand2024, cuiDeepVisionbasedRealtime2025}. A remaining problem is that recognition often becomes unreliable under changing lighting, cluttered backgrounds, or partial occlusion \cite{qiComputerVisionbasedHand2024}.
+ 
+Gesture recognition systems are usually split into two groups: vision-based and sensor-based approaches. Sensor-based methods, such as data gloves, electromyography, or inertial measurement units, give signals that barely depend on the environment, but they need extra hardware and are less convenient to use. Vision-based methods instead work contactless and feel more natural, but they are more sensitive to lighting, background, and occlusion \cite{qiComputerVisionbasedHand2024, shinMethodologicalStructuralReview2024}. Since both approaches have different strengths and weaknesses, they are increasingly combined instead of being seen as competitors \cite{wangComprehensiveSurveyMultimodal2026}.
+ 
+\section{Vision-Based Recognition}
+ 
+\subsection{Processing Pipeline}
+Vision-based systems usually follow the same basic pipeline: data acquisition, preprocessing to reduce noise and lighting variation, segmentation of the hand region, feature extraction, and finally classification \cite{qiComputerVisionbasedHand2024}. Segmentation is especially important, since mistakes here carry over into every following step and lower the overall performance.
+ 
+For feature extraction, both classic descriptors (Histogram of Oriented Gradients, Local Binary Patterns, geometric contour features) and learned deep features are used. Learned features tend to adapt better across different datasets. For classification, Support Vector Machines and Hidden Markov Models used to be the standard but have mostly been replaced by neural networks \cite{qiComputerVisionbasedHand2024}.
+ 
+RGB-D cameras like Microsoft Kinect or Intel RealSense add depth information to this pipeline, which helps with segmentation and makes the system more robust against lighting changes and cluttered backgrounds. Real-time performance, sensor accuracy, and generalization to new environments are still open problems \cite{qiComputerVisionbasedHand2024}.
+ 
+\subsection{From Hand-Crafted Features to Deep Learning}
+Early systems relied on manually defined features and did not generalize well outside controlled settings. Deep learning changed this by extracting features automatically from raw data. Convolutional Neural Networks are good at capturing spatial structure, while Long Short-Term Memory networks were initially used to model how gestures change over time \cite{cuiDeepVisionbasedRealtime2025}. More recently, transformer and attention-based models have started to replace recurrent networks, since they can model long-range dependencies and put more weight on relevant image regions, which improves performance on more complex gestures \cite{shinMethodologicalStructuralReview2024}.
+ 
+\section{Sensor-Based Recognition}
+Surface electromyography (sEMG) is one of the main sensor-based alternatives to vision. It measures electrical muscle activity to figure out which gesture was performed. Since it does not depend on visual conditions, it is useful for applications like prosthetic control or wearable interfaces. Deep learning models can now work directly on raw sEMG signals, so manual feature engineering is no longer necessary. The main problem that remains is that muscle signals vary a lot between individuals, which makes it hard to build models that generalize across users \cite{zanghieriSEMGbasedHandGesture2023}.
+ 
+\section{Multimodal Fusion}
+To work around the limits of a single modality, more research combines RGB, depth, skeletal, and sEMG data into multimodal systems. The main benefit is robustness: if one sensor fails, for example vision under occlusion, another modality such as an inertial or muscle-based sensor can compensate \cite{wangComprehensiveSurveyMultimodal2026}. The main difficulty is that these data sources are very different from each other in resolution, noise, and information content, which makes fusion non-trivial \cite{shinMethodologicalStructuralReview2024}.
+ 
+To fuse this data, hybrid deep-learning architectures are commonly used, combining CNNs for spatial features with recurrent or graph networks for temporal and structural dependencies. Transformers are increasingly used as well, since they can flexibly integrate different data sources \cite{wangComprehensiveSurveyMultimodal2026}. Mahmud et al. show this in practice by combining depth and skeletal data for dynamic gesture recognition, reporting clear improvements over single-modality baselines, especially for gestures that look visually similar \cite{mahmudDeepLearningbasedMultimodal2024}.
+ 
+\section{Open Challenges}
+Across vision-based, sensor-based, and multimodal systems, deep learning is now the common foundation, and the general trend is moving from single-modality pipelines toward multimodal fusion for better robustness. Challenges that keep showing up across the literature are the lack of standardized, realistic benchmarks, limited real-time capability, and poor generalization to new users and environments \cite{shinMethodologicalStructuralReview2024, wangComprehensiveSurveyMultimodal2026}.
+
