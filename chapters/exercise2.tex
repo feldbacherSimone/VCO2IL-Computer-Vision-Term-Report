@@ -1,9 +1,94 @@
 \chapter{Exercise 2}
-\section{Goal}
-Describe the goals here.
 
-\section{Procedure}
-Describe the procedure here.
+\section{Introduction}
 
-\section{Results}
-Summarize results.
+This exercise investigates different approaches for image compression. The main focus is on compression of the frequency domain using the Discrete Cosine Transform (DCT), where the effect of removing frequency coefficients on image quality and compression ratio is analyzed.
+
+Additionally, Implicit Neural Representations (INRs) are discussed as an alternative approach for image representation and compression.
+
+
+\section{Frequency Domain Compression}
+
+\subsection{Implementation}
+
+The DCT compression algorithm was implemented using OpenCV. The main steps are shown below:
+
+\begin{program}[H]
+\caption{DCT image compression}
+\label{prog:dct_compression}
+\begin{verbatim}
+def dct_compress(image, keep_ratio=0.25):
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY).astype(np.float32)
+    dct = cv2.dct(gray)
+
+    h, w = dct.shape
+    keep_h = int(h * np.sqrt(keep_ratio))
+    keep_w = int(w * np.sqrt(keep_ratio))
+
+    compressed = np.zeros_like(dct)
+    compressed[:keep_h, :keep_w] = dct[:keep_h, :keep_w]
+
+    reconstructed = cv2.idct(compressed)
+    reconstructed = np.clip(reconstructed,0,255).astype(np.uint8)
+
+    return reconstructed, compressed
+\end{verbatim}
+\end{program}
+
+The function first converts the RGB image to grayscale and applies the DCT. Compression is achieved by keeping only the low-frequency coefficients in the upper-left part of the DCT matrix. The remaining coefficients are discarded by setting them to zero. Finally, the inverse DCT reconstructs the compressed image.
+The effect of this compression process is illustrated in Figure~\ref{fig:dct_example}.
+
+
+\subsection{Results and Analysis}
+
+The quality of reconstruction was first evaluated using a fixed value $\texttt{keep\_ratio}$ of 25\%. Figure~\ref{fig:dct_example} shows the original grayscale image, the reconstructed image after DCT compression, and the retained DCT coefficients.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{dct_example.png}
+    \caption{Comparison between the original image, the DCT compressed reconstruction using $\texttt{keep\_ratio}=0.25$, and the retained DCT coefficients.}
+    \label{fig:dct_example}
+\end{figure}
+
+The reconstructed image preserves the main structure of the face, while some high-frequency details are removed due to the discarded coefficients. This shows that the low-frequency components contain important information for reconstructing the overall appearance of the image.
+
+To further analyze the influence of compression strength, different values of $\texttt{keep\_ratio}$ were tested (5\%, 10\%, 25\%, 50\% and 75\%). The reconstructed images and their corresponding MSE values are shown in Figure~\ref{fig:dct_ratios}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{dct_ratios.png}
+    \caption{Reconstructed images for different $\texttt{keep\_ratio}$ values. Lower values result in stronger compression and higher reconstruction error.}
+    \label{fig:dct_ratios}
+\end{figure}
+
+Removing more DCT coefficients increases compression, but reduces reconstruction quality. Lower $\texttt{keep\_ratio}$ values lead to a more visible loss of detail, blurrier images, and higher MSE values. Higher values preserve more information and result in better visual quality, but provide less compression. A medium $\texttt{keep\_ratio}$ provides a good balance between compression and reconstruction quality.
+
+The theoretical compression ratio depends on the number of retained DCT coefficients. For example, keeping only 5\% of the coefficients results in approximately a 20:1 compression ratio, while keeping 50\% results in 2:1 compression. Therefore, $\texttt{keep\_ratio}$ provides direct control over the trade-off between storage reduction and image quality.
+
+
+\section{Implicit Neural Representations}
+
+\subsection{Concept}
+
+Implicit Neural Representations (INRs) represent images using neural networks instead of directly storing pixel values. The network learns a function that maps the coordinates of the image $(x,y)$ to the RGB values. The network parameters are then used as the image representation.
+
+The size of the network influences the trade-off between compression and reconstruction quality. Larger networks can represent more details and improve reconstruction quality, but require more parameters and therefore more storage. Smaller networks provide stronger compression, but may lose image details.
+
+The number of training epochs also affects the quality of reconstruction. More epochs usually improve the result, but increase the required computation time. Positional encoding helps INRs capture high-frequency details such as edges and textures, resulting in sharper reconstructions.
+
+\subsection{Comparison}
+
+Compared to frequency-domain methods, INRs use a neural network representation instead of storing frequency coefficients. DCT-based compression is usually faster because reconstruction only requires mathematical transformations, while INRs require the evaluation of the neural network.
+
+INRs can represent fine details more flexibly, especially when positional encoding is used. However, this flexibility comes with higher computational costs. Frequency-domain methods are simpler and faster, but removing high-frequency coefficients can lead to loss of image details.
+
+
+\section{Conclusion}
+
+This exercise investigated image compression using frequency-domain methods and implicit neural representations.
+
+DCT-based compression showed that reducing the number of frequency coefficients can significantly decrease the required storage while preserving the main structure of the image. The parameter $\texttt{keep\_ratio}$ provides direct control over the trade-off between compression ratio and reconstruction quality. However, removing too many coefficients leads to increased MSE and loss of image details.
+
+INRs provide a different approach by representing images through neural network parameters instead of frequency coefficients. They can capture complex details, especially when using positional encoding, but require higher computational effort for training and reconstruction.
+
+Overall, both approaches involve a trade-off between compression efficiency and image quality. DCT offers a simple and fast compression method, while INRs provide a more flexible representation with increased computational requirements.
